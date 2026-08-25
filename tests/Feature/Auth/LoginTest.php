@@ -27,6 +27,20 @@ class LoginTest extends TestCase
         $response->assertSessionHasErrors(['email', 'password']);
     }
 
+    public function test_login_validation_keeps_email_but_not_password(): void
+    {
+        $response = $this->from(route('login'))->post(route('login.store'), [
+            'email' => 'not-an-email',
+            'password' => 'secret-password',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHasErrors('email');
+        $response->assertSessionHas('errors');
+        $response->assertSessionHasInput('email', 'not-an-email');
+        $response->assertSessionMissing('_old_input.password');
+    }
+
     public function test_user_cannot_login_with_invalid_credentials(): void
     {
         $user = User::factory()->create();
@@ -37,7 +51,9 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login'));
-        $response->assertSessionHasErrors('email');
+        $response->assertSessionHasErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ]);
         $this->assertGuest();
     }
 
@@ -50,7 +66,20 @@ class LoginTest extends TestCase
             'password' => 'correct-password',
         ]);
 
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_seeded_user_can_login(): void
+    {
+        $this->seed();
+
+        $response = $this->post(route('login.store'), [
+            'email' => 'jatipurnama17@gmail.com',
+            'password' => 'Code4Life!',
+        ]);
+
+        $response->assertRedirect(route('dashboard'));
+        $this->assertAuthenticated();
     }
 }

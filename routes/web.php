@@ -13,3 +13,8 @@ Route::middleware('guest')->group(function (): void {
         ->middleware('throttle:login')
         ->name('login.store');
 });
+
+Route::middleware('auth')->group(function (): void {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+});

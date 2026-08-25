@@ -1,0 +1,179 @@
+1. Routing
+
+Buat route untuk halaman login.
+
+Gunakan:
+
+GET /login
+
+untuk menampilkan halaman login.
+
+Kemudian gunakan:
+
+POST /login
+
+untuk memproses form login.
+
+Gunakan route name:
+
+login
+
+untuk halaman login.
+
+Pastikan route POST memiliki proteksi CSRF menggunakan:
+
+@csrf
+---------------
+2. Authentication
+
+Gunakan authentication bawaan Laravel.
+
+Ketika user melakukan login:
+
+Validasi email.
+Validasi password.
+Cocokkan credential dengan data user.
+Jika berhasil, lakukan authentication.
+Regenerate session.
+Redirect user ke halaman/dashboard setelah login berhasil.
+Jika gagal, kembali ke halaman login.
+Tampilkan pesan error yang sesuai.
+Jangan mengungkapkan apakah email atau password yang salah secara terpisah untuk alasan keamanan.
+
+Gunakan mekanisme authentication Laravel, bukan membuat sistem authentication manual dari nol.
+---------------
+3. Validasi Login
+
+Gunakan validation Laravel.
+
+Validasi:
+
+email:
+- required
+- email
+
+password:
+- required
+
+Jika validasi gagal:
+
+User tetap berada di halaman login.
+Input email tetap memiliki nilai sebelumnya menggunakan old().
+Password jangan dikembalikan menggunakan old().
+Tampilkan pesan error di bawah field terkait.
+---------------
+4. Error Authentication
+
+Jika email/password tidak cocok, tampilkan pesan:
+
+Email atau password yang Anda masukkan salah.
+
+Jangan memberikan informasi apakah email tersebut terdaftar atau tidak.
+---------------
+5. Keamanan
+
+Perhatikan keamanan aplikasi:
+
+Gunakan CSRF protection.
+Jangan menyimpan password dalam bentuk plaintext.
+Gunakan hashing password bawaan Laravel.
+Gunakan authentication Laravel.
+Regenerate session setelah login berhasil.
+Jangan menampilkan password pada error message.
+Gunakan validation Laravel.
+Jangan membuat authentication custom jika fitur bawaan Laravel sudah dapat digunakan.
+---------------
+6. Controller
+
+Buat controller yang bertanggung jawab terhadap authentication.
+
+Misalnya:
+
+app/Http/Controllers/Auth/
+
+Pisahkan logic authentication dari Blade.
+
+Jangan menaruh proses login di dalam Blade.
+
+Gunakan method controller yang jelas, misalnya:
+
+showLoginForm()
+login()
+logout()
+
+Jika terdapat pendekatan Laravel 13 yang lebih sesuai, gunakan pendekatan tersebut.
+---------------
+7. Dashboard
+
+Setelah login berhasil, redirect user ke:
+
+/dashboard
+
+Buat halaman dashboard sederhana sebagai tujuan setelah login.
+
+Dashboard cukup berisi:
+
+Dashboard
+Selamat datang!
+
+Dashboard harus hanya dapat diakses oleh user yang sudah login.
+
+Gunakan middleware authentication Laravel.
+
+Jika user belum login dan mencoba membuka:
+
+/dashboard
+
+maka user harus diarahkan ke halaman:
+
+/login
+---------------
+8. Logout
+
+Tambahkan fitur logout.
+
+Logout harus menggunakan:
+
+POST /logout
+
+Gunakan CSRF protection.
+
+Setelah logout berhasil, user diarahkan kembali ke:
+
+/login
+---------------
+9. Database User
+
+Gunakan model User bawaan Laravel:
+
+App\Models\User
+
+Gunakan migration users bawaan Laravel apabila tersedia.
+
+Jangan membuat tabel user baru jika tabel users bawaan Laravel sudah memenuhi kebutuhan.
+---------------
+10. Seeder
+
+Buat satu user dummy untuk testing login.
+
+Contoh:
+
+Email:
+jatipurnama17@gmail.com
+
+Password:
+Code4Life!
+
+Password harus disimpan menggunakan hashing Laravel.
+
+Jangan menyimpan:
+
+'password' => 'password'
+
+secara plaintext di database.
+
+Gunakan:
+
+Hash::make('password')
+
+atau mekanisme hashing Laravel yang sesuai.
