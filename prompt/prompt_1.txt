@@ -1,0 +1,5 @@
+Buatkan issue.md, berisi planning untuk membuat ini :
+Saya akan membuat satu project dengan Laravel 13.
+Buatkan Halaman Login dengan menggunakan Tailwind CSS dimana pada halaman tersebut terdapat :
+- input Email
+- input Password
